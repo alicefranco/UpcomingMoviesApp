@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Code Challenge</string>
     <string name="movie_and_genres">%s - %s</string>
+
+    <!--Movie Fragment-->
+    <string name="movie_title">Movie Title</string>
+    <string name="date_placeholder">01/01/1900</string>
+    <string name="movie_genres">Genres</string>
+    <string name="movie_description">Movie description</string>
 </resources>

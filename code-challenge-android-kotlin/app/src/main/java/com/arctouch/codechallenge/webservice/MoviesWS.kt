@@ -3,6 +3,7 @@ package com.arctouch.codechallenge.webservice
 import com.arctouch.codechallenge.api.TmdbApi
 import com.arctouch.codechallenge.base.BaseRequest
 import com.arctouch.codechallenge.model.GenreResponse
+import com.arctouch.codechallenge.model.Movie
 import com.arctouch.codechallenge.model.UpcomingMoviesResponse
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -47,12 +48,12 @@ class MoviesWS {
         }
     }
 
-    fun getMovie(id: Long, onSuccess: () -> Unit, onError: () -> Unit){
+    fun getMovie(id: Int, onSuccess: (movie: Movie) -> Unit, onError: () -> Unit){
         launch(UI){
             try {
-                BaseRequest.api.movie(id, TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE).awaitResult().let { result ->
+                BaseRequest.api.movie(id.toLong(), TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE).awaitResult().let { result ->
                     when (result) {
-                        is Result.Ok -> {} //todo onSuccess(result.value)
+                        is Result.Ok -> onSuccess(result.value)
                         is Result.Error -> {}//todo onError(result.response.code())
                         is Result.Exception -> {}//todo onError(Constants.ERROR_BAD_REQUEST)
                     }
