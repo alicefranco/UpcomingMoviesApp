@@ -57,10 +57,16 @@ class MovieFragment : Fragment() {
             overviewTextView.text = movie?.overview
 
             var genresNames = ""
+            var ignoreFirst = true
             genres.forEach {
-                genresNames = ", " + it.name + genresNames
+                if(ignoreFirst) {
+                    ignoreFirst = false
+                    genresNames = it.name
+                }
+                else{
+                    genresNames = genresNames + ", " + it.name
+                }
             }
-            //genresNames.removePrefix(", ")
             genreTextView.text = genresNames
 
             closeMovieImageView.setOnClickListener { closeMovieFragment() }
@@ -70,7 +76,7 @@ class MovieFragment : Fragment() {
                     .apply(RequestOptions().placeholder(R.drawable.ic_image_placeholder))
                     .into(posterImageView)
 
-            if (backdropPath != "") {
+            if (movie?.backdropPath != "") {
                 Glide.with(backdropImageView)
                         .load(movie?.backdropPath?.let { MovieImageUrlBuilder().buildBackdropUrl(it) })
                         .into(backdropImageView)

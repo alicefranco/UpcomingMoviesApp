@@ -8,6 +8,7 @@ import android.view.View
 import com.arctouch.codechallenge.viewmodel.HomeViewModel
 import com.arctouch.codechallenge.R
 import com.arctouch.codechallenge.home.HomeAdapter
+import com.arctouch.codechallenge.model.Genre
 import com.arctouch.codechallenge.model.Movie
 import kotlinx.android.synthetic.main.home_activity.*
 
@@ -19,13 +20,15 @@ class HomeActivity : AppCompatActivity() {
 
         val viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
-        viewModel.getMovies().observe(this, Observer<List<Movie>>{ movies ->
-            movies?.let{
-                recyclerView.adapter = HomeAdapter(this, movies, showMovieFragmentLayout,
-                        hideMovieFragmentLayout, showProgressBar, hideProgressBar)
-                progressBar.visibility = View.GONE
-            }
-            //TODO notify user if movies = null
+        viewModel.getGenres().observe(this, Observer<List<Genre>>{genres ->
+            viewModel.getMovies().observe(this, Observer<List<Movie>>{ movies ->
+                movies?.let{
+                    recyclerView.adapter = HomeAdapter(this, movies, showMovieFragmentLayout,
+                            hideMovieFragmentLayout, showProgressBar, hideProgressBar)
+                    progressBar.visibility = View.GONE
+                }
+                //TODO notify user if movies = null
+            })
         })
     }
 
