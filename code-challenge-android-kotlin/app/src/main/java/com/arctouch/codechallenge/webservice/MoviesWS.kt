@@ -1,7 +1,6 @@
 package com.arctouch.codechallenge.webservice
 
-import com.arctouch.codechallenge.api.TmdbApi
-import com.arctouch.codechallenge.base.BaseRequest
+import com.arctouch.codechallenge.webservice.api.TmdbApi
 import com.arctouch.codechallenge.model.GenreResponse
 import com.arctouch.codechallenge.model.Movie
 import com.arctouch.codechallenge.model.UpcomingMoviesResponse

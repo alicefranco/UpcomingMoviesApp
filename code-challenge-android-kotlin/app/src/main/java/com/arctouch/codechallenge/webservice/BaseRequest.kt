@@ -1,6 +1,6 @@
-package com.arctouch.codechallenge.base
+package com.arctouch.codechallenge.webservice
 
-import com.arctouch.codechallenge.api.TmdbApi
+import com.arctouch.codechallenge.webservice.api.TmdbApi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

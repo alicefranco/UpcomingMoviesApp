@@ -1,6 +1,5 @@
 package com.arctouch.codechallenge.home
 
-import android.app.FragmentManager
 import android.content.Context
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
@@ -13,8 +12,7 @@ import com.arctouch.codechallenge.util.MovieImageUrlBuilder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.movie_item.view.*
-import com.arctouch.codechallenge.MovieFragment
-import com.arctouch.codechallenge.webservice.MoviesWS
+import com.arctouch.codechallenge.ui.MovieFragment
 
 class HomeAdapter(private val context: Context, private val movies: List<Movie>,
                   private var showMovieFragmentLayout: () -> Unit, private var hideMovieFragmentLayout: () -> Unit,
@@ -57,17 +55,13 @@ class HomeAdapter(private val context: Context, private val movies: List<Movie>,
 
     fun openMovieFragment(id: Int){
         //TODO remove API call
-        MoviesWS().getMovie(id, { movie ->
-            val fragment = MovieFragment.newInstance(movie, closeMovieFragment)
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            if(firstFragment == false) fragmentTransaction.add(R.id.frameLayout, fragment,"MOVIE_FRAGMENT")
-            else fragmentTransaction.replace(R.id.frameLayout, fragment,"MOVIE_FRAGMENT")
-            fragmentTransaction.commit()
-            showMovieFragmentLayout()
-            hideProgressbar()
-        },{
-            //TODO onError()
-        })
+        val fragment = MovieFragment.newInstance(id, closeMovieFragment)
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        if(firstFragment == false) fragmentTransaction.add(R.id.frameLayout, fragment,"MOVIE_FRAGMENT")
+        else fragmentTransaction.replace(R.id.frameLayout, fragment,"MOVIE_FRAGMENT")
+        fragmentTransaction.commit()
+        showMovieFragmentLayout()
+        hideProgressbar()
     }
 
     private var closeMovieFragment: () -> Unit = {

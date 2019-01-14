@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import com.arctouch.codechallenge.webservice.MoviesWS
 import com.arctouch.codechallenge.R
 import com.arctouch.codechallenge.data.Cache
-import com.arctouch.codechallenge.home.HomeActivity
+import com.arctouch.codechallenge.ui.HomeActivity
 
 class SplashActivity : AppCompatActivity() {
 

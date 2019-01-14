@@ -1,4 +1,4 @@
-package com.arctouch.codechallenge
+package com.arctouch.codechallenge.viewmodel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
