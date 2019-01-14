@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.movie_item.view.*
 import com.arctouch.codechallenge.ui.MovieFragment
 
-class HomeAdapter(private val context: Context, private val movies: List<Movie>,
+class HomeAdapter(private val context: Context, private val movies: ArrayList<Movie>,
                   private var showMovieFragmentLayout: () -> Unit, private var hideMovieFragmentLayout: () -> Unit,
                   var showProgressbar: () -> Unit, var hideProgressbar: () -> Unit) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
     private var firstFragment = false
@@ -50,7 +50,6 @@ class HomeAdapter(private val context: Context, private val movies: List<Movie>,
             showProgressbar()
             openMovieFragment(movies[position].id)
         }
-        holder
     }
 
     fun openMovieFragment(id: Int){

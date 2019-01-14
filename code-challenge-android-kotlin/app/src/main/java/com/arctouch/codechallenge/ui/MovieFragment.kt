@@ -19,11 +19,6 @@ import kotlinx.android.synthetic.main.movie_fragment.*
 class MovieFragment : Fragment() {
 
     private var id: Int? = null
-    private var title: String? = ""
-    private var releaseDate: String? = ""
-    private var overview: String? = ""
-    private var posterPath: String? = ""
-    private var backdropPath: String? = ""
     private lateinit var genres: List<Genre>
     private var closeMovieFragment: () -> Unit = {}
 
@@ -54,7 +49,12 @@ class MovieFragment : Fragment() {
 
             titleTextView.text = movie?.title
             releaseDateTextView.text = movie?.releaseDate
-            overviewTextView.text = movie?.overview
+
+            if(movie?.overview.isNullOrBlank()){
+                overviewTextView.text = getString(R.string.overview_not_available)
+            }
+            else
+                overviewTextView.text = movie?.overview
 
             var genresNames = ""
             var ignoreFirst = true
@@ -76,7 +76,7 @@ class MovieFragment : Fragment() {
                     .apply(RequestOptions().placeholder(R.drawable.ic_image_placeholder))
                     .into(posterImageView)
 
-            if (movie?.backdropPath != "") {
+            if (!movie?.backdropPath.isNullOrBlank()) {
                 Glide.with(backdropImageView)
                         .load(movie?.backdropPath?.let { MovieImageUrlBuilder().buildBackdropUrl(it) })
                         .into(backdropImageView)

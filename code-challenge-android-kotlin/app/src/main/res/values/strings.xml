@@ -7,4 +7,5 @@
     <string name="date_placeholder">01/01/1900</string>
     <string name="movie_genres">Genres</string>
     <string name="movie_description">Movie description</string>
+    <string name="overview_not_available">The overview is not available</string>
 </resources>

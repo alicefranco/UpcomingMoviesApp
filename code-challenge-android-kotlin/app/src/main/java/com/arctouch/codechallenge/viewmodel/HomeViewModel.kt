@@ -11,21 +11,31 @@ import com.arctouch.codechallenge.webservice.MoviesWS
 class HomeViewModel : ViewModel() {
     private lateinit var movies: MutableLiveData<List<Movie>>
     private lateinit var genres: MutableLiveData<List<Genre>>
+    private lateinit var totalPages: MutableLiveData<Int>
 
-    fun getMovies(): LiveData<List<Movie>> {
+
+    fun getUpcomingMovies(page: Long) : LiveData<List<Movie>> {
         if (!::movies.isInitialized) {
             movies = MutableLiveData()
-            loadMovies()
+            loadMovies(page)
         }
         return movies
     }
 
-    private fun loadMovies()  {
-        MoviesWS().getUpcomingMovies(1, {
+    fun getTotalPages() : LiveData<Int>{
+        if (!::totalPages.isInitialized) {
+            totalPages.value = 0
+        }
+        return totalPages
+    }
+
+    private fun loadMovies(page: Long)  {
+        MoviesWS().getUpcomingMovies(page, {
             val moviesWithGenres = it.results.map { movie ->
                 movie.copy(genres = genres.value?.filter { movie.genreIds?.contains(it.id) == true })
             }
             movies.value = moviesWithGenres
+            totalPages.value = it.totalPages
         },{
             //TODO onError()
         })
@@ -42,6 +52,7 @@ class HomeViewModel : ViewModel() {
     private fun loadGenres()  {
         MoviesWS().getGenres({
             genres.value = it.genres
+            Cache.cacheGenres(it.genres)
         },{
             //TODO onError()
         })

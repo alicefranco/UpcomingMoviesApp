@@ -23,7 +23,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/movie_title"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/closeMovieImageView"
         app:layout_constraintStart_toEndOf="@+id/posterImageView"
         app:layout_constraintTop_toTopOf="@+id/posterImageView" />
