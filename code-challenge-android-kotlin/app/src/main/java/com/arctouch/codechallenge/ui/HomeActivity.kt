@@ -9,6 +9,7 @@ import com.arctouch.codechallenge.viewmodel.HomeViewModel
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.AbsListView
+import com.arctouch.codechallenge.InfiniteScrollListener
 import com.arctouch.codechallenge.R
 import com.arctouch.codechallenge.data.Cache
 import com.arctouch.codechallenge.home.HomeAdapter
@@ -41,11 +42,17 @@ class HomeActivity : AppCompatActivity() {
                     hideMovieFragmentLayout, showProgressBar, hideProgressBar)
                     recyclerView.layoutManager = layoutManager
                     recyclerView.adapter = adapter
-                    val scrollListener = getScrollListener(layoutManager, adapter)
-                    recyclerView.addOnScrollListener(scrollListener)
-                    progressBar.visibility = View.GONE
-            }
-
+                    recyclerView.addOnScrollListener(object: InfiniteScrollListener(layoutManager){
+                        override fun loadMore() {
+                            progressBar.visibility = View.VISIBLE
+                            pageNumber++
+                            viewModel.getUpcomingMovies(pageNumber).observe(this@HomeActivity, Observer<List<Movie>>{ movies ->
+                                progressBar.visibility = View.GONE
+                            })
+                            adapter.notifyDataSetChanged()
+                        }
+                    })
+                }
                 //TODO notify user if movies = null
             })
         })
@@ -65,41 +72,5 @@ class HomeActivity : AppCompatActivity() {
 
     var hideProgressBar: () -> Unit = {
         progressBar.visibility = View.GONE
-    }
-
-    fun getScrollListener(layoutManager: LinearLayoutManager, adapter: HomeAdapter) : RecyclerView.OnScrollListener {
-        return object: RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                currentItems = layoutManager.childCount
-                scrolledOutItems = layoutManager.findFirstVisibleItemPosition()
-                totalItems = layoutManager.itemCount
-
-                if(isScrolling && (currentItems + scrolledOutItems == totalItems)){
-                    isScrolling = false
-                    pageNumber++
-                    progressBar.visibility = View.VISIBLE
-                    //TODO move api call to viewmodel
-                    MoviesWS().getUpcomingMovies(pageNumber, {
-                        val moviesWithGenres = it.results.map { movie ->
-                            movie.copy(genres = Cache.genres.filter { movie.genreIds?.contains(it.id) == true })
-                        }
-                        moviesWithGenres.forEach {
-                            upcomingMovies.add(it)
-                        }
-                        adapter.notifyDataSetChanged()
-                        progressBar.visibility = View.GONE
-                    },{
-                        //TODO onError()
-                    })
-                }
-            }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
-                    isScrolling = true
-            }
-        }
     }
 }
